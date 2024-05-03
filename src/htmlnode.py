@@ -12,8 +12,8 @@ class HTMLNode:
     if self.props is None:
       return ""
     props_html = ""
-    for prop in self.props:
-      props_html += f' {prop}="{self.props[prop]}"'
+    for key, value in self.props.items():
+      props_html += f' {key}="{value}"'
     return props_html
       
   def __repr__(self):
@@ -40,9 +40,24 @@ class ParentNode(HTMLNode):
     super().__init__(tag, None, children, props)
 
   def to_html(self):
+    if self.tag == "":
+      raise ValueError("Tag cannot be an empty string")
     if self.tag is None:
-      raise ValueError("no tag found")
-    if self.children is None:
-      raise ValueError("no children found")
+      raise ValueError("ParentNode requires a tag")
+    if not self.children:
+      raise ValueError("ParentNode requires at least 1 child")
+    
+    html_output = f"<{self.tag}"
+    
+    if self.props is not None:
+      props_html = self.props_to_html()
+      html_output += props_html
+    html_output += ">"
+    
     for child in self.children:
-      print(child)
+      child_html = child.to_html()
+      html_output += child_html
+      
+    html_output += f"</{self.tag}>"
+    
+    return html_output
