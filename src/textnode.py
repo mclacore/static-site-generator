@@ -41,7 +41,3 @@ def text_node_to_html_node(text_node):
   if text_node.text_type == text_type_image:
     return LeafNode("img", "", {"src": text_node.url, "alt": text_node.text})
   raise Exception(f"{text_node.text_type} does not match available types.")
-
-
-def split_nodes_delimiter(old_nodes, delimiter, text_type):
-  
